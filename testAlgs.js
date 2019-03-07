@@ -1,4 +1,5 @@
-const bubbleSort = require('./bubble');
+const bubbleSort = require('./bubble'),
+      quickSort = require('./quickSort');
 
 const makeTestArr = len => {
     let testArr = [];
@@ -9,13 +10,31 @@ const makeTestArr = len => {
 }
 
 const timeAlg = (arr, alg, log=false) => {
-    console.log(`Testing ${alg.name}`)
+    if(log) console.log(`Testing ${alg.name}`)
     t = process.hrtime();
     alg(arr, log);
     t = process.hrtime(t);
-    console.log(`\n${alg.name} took ${t[0]} second(s) and ${t[1]} nanoseconds to sort.`)
+    if(log) console.log(`\n${alg.name} took ${t[0]} second(s) and ${t[1]} nanoseconds to sort.`)
+    return t[0] * 1e+9 + t[1];
 }
 
-timeAlg(makeTestArr(50), bubbleSort, true);
-timeAlg(makeTestArr(500), bubbleSort);
-timeAlg(makeTestArr(10000000), bubbleSort);
+const gauntlet = alg => {
+    let timeSum = 0;
+    for(let i = 0; i < 10000; i++) {
+        timeSum += timeAlg(makeTestArr(1000), alg);
+    }
+    return {
+        total: timeSum,
+        average: timeSum / 10000
+    }
+}
+
+const formatNanos = nanoseconds => {
+    return `${Math.floor(nanoseconds / 1e+9)} seconds, ${nanoseconds % 1e+9} nanoseconds`;
+}
+
+const bubbleTest = gauntlet(bubbleSort);
+const quickTest = gauntlet(quickSort);
+console.log(`\nPUT 'EM THROUGH THE GAUNTLET:\n-------------------------\n
+            \rBubbleSort --- Total: ${formatNanos(bubbleTest.total)}| Average: ${formatNanos(bubbleTest.average)}\n
+            \rQuickSort ---- Total: ${formatNanos(quickTest.total)} | Average: ${formatNanos(quickTest.average)}\n`);
