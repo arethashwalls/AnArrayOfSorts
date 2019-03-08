@@ -1,6 +1,7 @@
 const bubbleSort = require('./algs/bubble'),
       quickSort = require('./algs/quick'),
       radixSort = require('./algs/radix'),
+      countSort = require('./algs/count'),
       {gauntlet} = require('./helpers');
 
 
