@@ -1,6 +1,6 @@
-const bubbleSort = require('./bubble'),
-      quickSort = require('./quick'),
-      radixSort = require('./radix'),
+const bubbleSort = require('./algs/bubble'),
+      quickSort = require('./algs/quick'),
+      radixSort = require('./algs/radix'),
       {gauntlet} = require('./helpers');
 
 
