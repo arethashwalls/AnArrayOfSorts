@@ -1,13 +1,8 @@
 const bubbleSort = require('./bubble'),
-      quickSort = require('./quickSort');
+      quickSort = require('./quick'),
+      radixSort = require('./radix');
 
-const makeTestArr = len => {
-    let testArr = [];
-    for(let i = 0; i < len; i++) {
-        testArr.push(Math.floor(Math.random() * 100));
-    }
-    return testArr;
-}
+const makeTestArr = len => [...Array(len)].map(() => Math.floor(Math.random() * 100));
 
 const timeAlg = (arr, alg, log=false) => {
     if(log) console.log(`Testing ${alg.name}`)
@@ -33,8 +28,11 @@ const formatNanos = nanoseconds => {
     return `${Math.floor(nanoseconds / 1e+9)} seconds, ${nanoseconds % 1e+9} nanoseconds`;
 }
 
-const bubbleTest = gauntlet(bubbleSort);
-const quickTest = gauntlet(quickSort);
+const bubbleTest = gauntlet(bubbleSort),
+      quickTest = gauntlet(quickSort),
+      radixTest = gauntlet(radixSort);
+
 console.log(`\nPUT 'EM THROUGH THE GAUNTLET:\n-------------------------\n
             \rBubbleSort --- Total: ${formatNanos(bubbleTest.total)}| Average: ${formatNanos(bubbleTest.average)}\n
-            \rQuickSort ---- Total: ${formatNanos(quickTest.total)} | Average: ${formatNanos(quickTest.average)}\n`);
+            \rQuickSort ---- Total: ${formatNanos(quickTest.total)} | Average: ${formatNanos(quickTest.average)}\n
+            \rRadixSort ---- Total: ${formatNanos(radixTest.total)} | Average: ${formatNanos(radixTest.average)}`);

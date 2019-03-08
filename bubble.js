@@ -1,5 +1,5 @@
 const bubbleSort = (arr, log=false) => {
-    if(log) console.log(`Original array: ${arr.join(' ')}`);
+    if(log) console.log(`\nOriginal array: ${arr.join(' ')}`);
     let sorted = arr.slice();
     let changed = false;
     for(let i = 0; i < sorted.length; i++) {

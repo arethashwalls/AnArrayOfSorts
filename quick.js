@@ -1,5 +1,5 @@
 const quickSort = (arr, log=false) => {
-    if(log) console.log(`Original array: ${arr.join(' ')}`)
+    if(log) console.log(`\nOriginal array: ${arr.join(' ')}`)
     if(arr.length < 2) return arr;
     const pivot = arr[Math.floor(Math.random() * arr.length)];
     let less = [];
