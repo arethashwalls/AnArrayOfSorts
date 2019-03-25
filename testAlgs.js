@@ -1,55 +1,66 @@
 const algs = require('./algs'),
-    { gauntlet } = require('./helpers/testHelpers'),
+    { timeAlg, gauntlet } = require('./helpers/testHelpers'),
     format = require('./helpers/formatHelpers'),
     { ask, rl } = require('./helpers/askHelpers');
 
-
-// const bubbleTest = gauntlet(algs.bubble, 5),
-//       quickTest = gauntlet(algs.quick, 5),
-//       radixTest = gauntlet(algs.radix, 5);
-
-// console.log(algs)
-
 const introAsk = () => {
-    ask(`\nWhat would you like to do?
-    \r\n>[1] Get info on an algorithm
-    \r>[2] Test a single algorithm
-    \r>[3] Test all algorithms
-    \r>[4] Quit
-    \r\n>> `)
-    .then(answer => {
-        switch (answer) {
-            case '1':
-                askWhich();
-                break;
-            case '2':
-                break;
-            case '3':
-                break;
-            case '4':
-                console.log('\nGoodbye!\n');
-                rl.close();
-                break;
-            default:
-                console.log('Please enter 1, 2, or 3.');
-                break;
-        }
-    });
+    ask(`\n${format.colorfy('What would you like to do?', 'yellow')}
+    \r\n${format.formatify('>[1]', 'bold', 'yellow')} Get info on an algorithm
+    \r${format.formatify('>[2]', 'bold', 'yellow')} Test a single algorithm
+    \r${format.formatify('>[3]', 'bold', 'yellow')} Test all algorithms
+    \r${format.formatify('>[4]', 'bold', 'yellow')} Quit
+    \r\n${format.colorfy('>>', 'cyan')} `)
+        .then(answer => {
+            switch (answer) {
+                case '1':
+                    giveInfo();
+                    break;
+                case '2':
+                    testOne();
+                    break;
+                case '3':
+                    break;
+                case '4':
+                    console.log('\nGoodbye!\n');
+                    rl.close();
+                    break;
+                default:
+                    console.log('Please enter 1, 2, or 3.');
+                    break;
+            }
+        });
 }
 
 const askWhich = () => {
-    console.log('\nWhich algorithm?\n');
-    algs.forEach((alg, i) => console.log(`>[${i + 1}] ${alg.name}`));
-    introAsk();
+    return new Promise((resolve, reject) => {
+        ask(`\nWhich algorithm?
+            \r${algs.map((alg, i) => `\n>[${i + 1}] ${alg.name}`).join(' ')}
+            \r\n${format.colorfy('>>', 'cyan')} `)
+        .then(answer => {
+            const alg = algs[answer - 1];
+            resolve(alg)
+        })
+    });
 }
 
-console.log(format.colorfy(`\nWelcome to ${format.formatify('An Array of Sorts', 'bold')}`, 'cyan'));
+const giveInfo = () => {
+    askWhich()
+    .then(alg => {
+        console.log('\n' + alg.description);
+        console.log('\n' + alg.func.toString());
+        introAsk();
+    })
+}
+
+const testOne = () => {
+    askWhich()
+    .then(alg => {
+        console.log('\n');
+        timeAlg(alg.func, true);
+        introAsk();
+    })
+}
+
+console.log(format.colorfy(`\nWelcome to ${format.formatify('An Array of Sorts', 'bold', 'cyan')}`, 'cyan'));
 introAsk();
 
-    
-
-
-// console.log(`\nPUT 'EM THROUGH THE GAUNTLET:\n-------------------------\n
-//             \rBubbleSort --- Total: ${formatNanos(bubbleTest.total)}| Average: ${formatNanos(bubbleTest.average)}\n
-//             \rQuickSort ---- Total: ${formatNanos(quickTest.total)} | Average: ${formatNanos(quickTest.average)}\n
-//             \rRadixSort ---- Total: ${formatNanos(radixTest.total)} | Average: ${formatNanos(radixTest.average)}\n`);

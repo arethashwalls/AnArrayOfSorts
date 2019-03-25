@@ -63,7 +63,7 @@ const colorfy = (str, color) => {
     return `\x1b[${code}m${str}\x1b[0m`
 }
 
-const formatify = (str, format) => {
+const formatify = (str, format, color='white') => {
     let code;
     switch(format) {
         case 'bold':
@@ -84,7 +84,7 @@ const formatify = (str, format) => {
         default:
             return str;
     }
-    return `\x1b[${code}m${str}\x1b[0m`
+    return colorfy(`\x1b[${code}m${str}\x1b[0m`, color)
 }
 
 module.exports = {

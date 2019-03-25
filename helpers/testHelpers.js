@@ -5,7 +5,7 @@ const formatNanos = nanoseconds => {
     return `${Math.floor(nanoseconds / 1e+9)} seconds, ${nanoseconds % 1e+9} nanoseconds`;
 };
 
-const timeAlg = (arr, alg, log = false) => {
+const timeAlg = (alg, log = false, arr=(makeTestArr(100))) => {
     if (log) console.log(`Testing ${alg.name}`)
     t = process.hrtime();
     alg(arr, log);
